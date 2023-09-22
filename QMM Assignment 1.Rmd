@@ -1,0 +1,147 @@
+---
+title: "Assignment-2 QMM"
+author: "Srinivasarao Madala"
+date: "`r Sys.Date()`"
+output:
+  html_document: default
+  pdf_document: default
+---
+**Problem**
+
+Suppose
+
+The Production of Plants in Large Size $$=A$$
+The Production of Plants in Medium Size $$=B$$
+The Production of Plants in Small Size $$=C$$
+
+Objective Function is
+
+$$  Max \hspace{.3cm} Z = 420(A_1+A_2+A_3)+360(B_1+B_2+B_3)+300(C_1+C_2+C_3)$$
+Reorganizing the objective function
+
+$$  Max\hspace{.3cm} Z = 420A_1 + 360B_1 + 300C_1 + 420A_2 + 360B_2 + 300C_2 + 420A_3 + 360B_3 + 300C_3 $$
+Subject to
+
+
+$$A_1+B_1+C_1\le750$$
+
+$$A_2+B_2+C_2\le900$$
+
+$$A_3+B_3+C_3\le450 $$
+
+$$20A_1+15B_1+12C_1\le13000$$
+
+$$20A_2+15B_2+12C_2\le12000$$
+
+
+
+$$20A_3+15B_3+12C_3\le5000$$
+
+$$A_1+A_2+A_3\le900$$
+
+$$B_1+B_2+B_3\le1200$$
+
+
+$$C_1+C_2+C_3\le750$$
+
+
+Non-negativity constraints :
+
+
+$$A_1, A_2, A_3, B_1, B_2, B_3, C_1, C_2, C_3 \ge0 $$
+
+**The above LP problem constraints can be writing in this format also**
+
+
+$$A_1+B_1+C_1+0A_2+0B_2+0C_2+0A_3+0B_3+0C_3\le750$$
+
+$$0A_1+0B_1+0C_1+A_2+B_2+C_2+0A_3+0B_3+0C_3\le900$$
+
+$$0A_1+0B_1+0C_1+0A_2+0B_2+0C_2+A_3+B_3+C_3\le450$$
+
+$$20A_1+15B_1+12C_1+0A_2+0B_2+0C_2+0A_3+0B_3+0C_3\le13000$$
+
+$$0A_1+0B_1+0C_1+20A_2+15B_2+12C_2+0A_3+0B_3+0C_3\le12000$$
+
+$$0A_1+0B_1+0C_1+0A_2+0B_2+0C_2+20A_3+15B_3+12C_3\le5000$$
+
+$$A_1+0B_1+0C_1+A_2+0B_2+0C_2+A_3+0B_3+0C_3\le900$$
+
+$$0A_1+B_1+0C_1+0A_2+B_2+0C_2+0A_3+B_3+0C_3\le1200$$
+
+$$0A_1+0B_1+C_1+0A_2+0B_2+C_2+0A_3+0B_3+C_3\le750$$
+
+```{r setup}
+
+#Solution
+
+#installing the required packages
+#install.packages("lpsolve")
+
+#library
+library(lpSolve)
+
+#The objective function is to maximize Z = 420A1 + 360B1 + 300C1 + 420A2 + 360B2 + 300C2 + 420A3 + 360B3 + 300C3
+
+
+Obj_fun<-c(420,360,300,420,360,300,420,360,300)
+
+#Below constraints are written in the matrix form:
+
+con_fun <-matrix(c(1,1,1,0,0,0,0,0,0,
+                 0,0,0,1,1,1,0,0,0,
+                 0,0,0,0,0,0,1,1,1,
+                 20,15,12,0,0,0,0,0,0,
+                 0,0,0,20,15,12,0,0,0,
+                 0,0,0,0,0,0,20,15,12,
+                 1,0,0,1,0,0,1,0,0,
+                 0,1,0,0,1,0,0,1,0,
+                 0,0,1,0,0,1,0,0,1), nrow = 9, byrow = TRUE)
+```
+
+```{r}
+# set the direction of the inequalities using subject to equation for this.
+
+Dir_fun <-c("<=",
+          "<=",
+          "<=",
+          "<=",
+          "<=",
+          "<=", 
+          "<=",
+          "<=",
+          "<=")
+```
+
+```{r}
+#set the right hand side of the coefficients
+
+rhs_fun <-c(750,
+          900,
+          450,
+          13000,
+          12000,
+          5000,
+          900,
+          1200,
+          750)
+```
+
+```{r}
+#finding the objective function value 
+
+
+lp("max", Obj_fun, con_fun, Dir_fun, rhs_fun)
+
+```
+
+```{r}
+#Values of each variable
+
+
+lp("max", Obj_fun, con_fun, Dir_fun, rhs_fun)$solution
+
+
+
+```
+
